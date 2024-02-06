@@ -162,94 +162,89 @@ function nicen_theme_getPostBad($postID)
     return $count;
 }
 
-
-/*
- * 根据文章内容生成侧边导航
- * */
-function nicen_theme_navigator()
-{
-
-
-    if (is_single()) {
+// common修改函数，显示侧栏
+function generate_unique_id() {
+    static $id_count = 0;
+    return 'h' . (++$id_count);
+}
+function nicen_theme_navigator() {
+    if ( is_single() ) {
+        // 获取文章内容
         $content = get_the_content();
 
-        $h1_number = 1; //h1个数
-        $h2_number = 1; //h2个数
-        $h3_number = 1; //h3个数
+        // 使用正则表达式匹配文章内容中的H1、H2、H3标题
+        $pattern = '/<h([1-3])[^>]*>(.*?)<\/h[1-3]>/';
+        preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
 
-        $h = "/\[h2\][\s\S]*?\[\/h2\]|\[h1\][\s\S]*?\[\/h1\]|\[h3\][\s\S]*?\[\/h3\]/"; //匹配h1标题的正则
+        // 初始化目录结构
+        $replace = '<ul>';
 
+        // 遍历匹配到的标题，并根据层级构建目录
+        foreach ($matches as $match) {
+            $level = $match[1]; // 获取标题层级
+            $title = strip_tags($match[2]); // 获取标题内容，并去除HTML标签
 
-        preg_match_all($h, $content, $match, PREG_OFFSET_CAPTURE);
+            // 生成唯一的锚点
+            $anchor = generate_unique_id();
 
-        $replace = '';
+            // 在标题中添加 ID 属性作为锚点
+            $title_with_anchor = '<h' . $level . ' id="' . $anchor . '">' . $title . '</h' . $level . '>';
 
+            // 在文章内容中替换原始标题为带有 ID 属性的标题
+            $content = str_replace($match[0], $title_with_anchor, $content);
 
-        foreach ($match[0] as $item) {
-
-
-            if (strpos($item[0], 'h1') !== false) {
-                $temp = str_replace(['[h1]', '[/h1]'], ['', ''], $item[0]);
-                $replace .= '<li>
-							<div class="first-index">
-								<div><a href="#h2' . $h1_number . '" title="' . $temp . '">' . $temp . '</a></div>
-							</div>
-						</li>';
-                $h1_number++;
-            } else if (strpos($item[0], 'h2') !== false) {
-                $temp = str_replace(['[h2]', '[/h2]'], ['', ''], $item[0]);
-                $replace .= '<li>
-							<div class="secondary-index">
-								<div><a href="#h3' . $h2_number . '" title="' . $temp . '">' . $temp . '</a></div>
-							</div>
-						</li>';
-                $h2_number++;
-            } else if (strpos($item[0], 'h3') !== false) {
-                $temp = str_replace(['[h3]', '[/h3]'], ['', ''], $item[0]);
-                $replace .= '<li>
-							<div class="third-index">
-								<div><a href="#h4' . $h3_number . '" title="' . $temp . '">' . $temp . '</a></div>
-							</div>
-						</li>';
-                $h3_number++;
-            }
-
+            // 根据标题层级构建目录项
+            $div_class = ($level == '1' or $level == '2') ? 'first-index' : 'secondary-index';
+            $replace .= '<li>';
+            $replace .= '<div class="' . $div_class . '"><div><a href="#' . $anchor . '" title="' . $title . '">' . $title . '</a></div></div>';
+            $replace .= '</li>';
         }
 
+        // 结束目录结构
+        $replace .= '</ul>';
+
+        // 将替换后的文章内容更新回去
+        global $post;
+        $post->post_content = $content;
+
+        // 返回生成的目录
         return $replace;
+
     } else {
-        $replace = '';
-        $h1_number = 1; //h1个数
+        // 如果不是单篇文章页面，这里可以按照你的逻辑处理其他情况
+		$replace   = '';
+		$h1_number = 1; //h1个数
 
-        if (have_posts()) {
-            while (have_posts()) {
-                the_post();
+		if ( have_posts() ) {
+			while ( have_posts() ) {
+				the_post();
 
-                /*
-                 * 排除不显示的目录文章
-                 * */
-                if (!canShow()) {
-                    continue;
-                }
+				/*
+				 * 排除不显示的目录文章
+				 * */
+				if ( ! canShow() ) {
+					continue;
+				}
 
-                $title = get_the_title();
+				$title = get_the_title();
 
-                $replace .= '<li>
+				$replace .= '<li>
 							<div class="first-index">
 								<div><a href="#h2' . get_the_ID() . '" title="' . $title . '">' . $h1_number . '. ' . $title . '</a></div>
 							</div>
 						</li>';
 
-                $h1_number++;
-            }
+				$h1_number ++;
+			}
 
-            wp_reset_query(); //重置文章指指针
-        }
+			wp_reset_query(); //重置文章指指针
+		}
 
-        return $replace;
+		return $replace;
     }
-
 }
+
+
 
 
 /*

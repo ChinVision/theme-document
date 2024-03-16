@@ -14,7 +14,7 @@ if ( nicen_theme_showArticleCate() ) {
 	$catelog = nicen_theme_navigator();
 
 	if ( ! empty( $catelog ) ) {
-
+		
 		?>
         <div id="space">
             <aside class="main-left" id="navigator">

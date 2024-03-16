@@ -54,5 +54,3 @@ if ( post_password_required() ) {
 }
 get_footer();
 ?>
-
-

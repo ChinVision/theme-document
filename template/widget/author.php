@@ -33,7 +33,7 @@ if ($count_posts) {
 <!--作者信息-->
 <div class="author">
     <div class="author-beijin">
-        <img src="<?php echo $beijin; ?>" title="作者头像"/>
+        <img src="<?php echo $beijin; ?>" title="个人背景图"/>
     </div>
     <div class="offset">
         <div class="author-avatar">
@@ -64,8 +64,36 @@ if ($count_posts) {
                 <span class="top">阅读数</span>
                 <span class="bottom"><?php echo $views; ?></span>
             </div>
-
         </div>
+		<br>
+		<hr style="border-color: ##eff7ff90;">
+<div class="statistic">
+	 
+    <div class="item">
+		<span class="top">
+		<a href="https://space.bilibili.com/390094937" style="display: inline-block; border-radius: 50%;">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bilibili.svg" title="B站" style="width: 50px; height: 50px; border-radius: 50%;" />
+        </a>
+		</span>
+			
+    </div>
+	<div class="item">
+		<span class="top">
+			<a href="https://github.com/ChinVision/" style="display: inline-block; border-radius: 50%;">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/github.svg" title="GiHub" style="width: 50px; height: 50px; border-radius: 50%;" />
+        </a>
+			</span>
+	</div>
+	<div class="item">
+		<span class="top">
+			<a href="https://www.zhihu.com/people/chen-da-bao-27-95" style="display: inline-block; border-radius: 50%;">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/zhihu.svg" title="ZhiHu" style="width: 50px; height: 50px; border-radius: 50%;" />
+        </a>
+			</span>
+	</div>
+</div>
+
+
     </div>
 
 </div>

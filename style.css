@@ -102,7 +102,18 @@ Tags: 文档,自适应,主题切换,阅读进度跟随
 
 .theme-eight {
   --theme-color: #eb2f96 !important; }
-
+/* 代码文字样式 */
+p code {
+    background-color: #f4f4f4; /* 背景颜色 */
+    padding: 2px; /* 内边距 */
+    border: none; /* 边框 1px solid #ccc */
+	
+    border-radius: 3px; /* 边框圆角 */
+    overflow: auto; /* 滚动条 */
+    width: 90%; /* 代码块宽度设置为百分比 */
+    font-family: monospace; /* 字体族 */
+    color: #e96900; /* 字体颜色设置为橘色 */
+}
 /* 变量 */
 /*暗黑模式变量*/
 /*
@@ -2270,4 +2281,4 @@ html {
       html body #author {
         display: none; }
       html body .main-container .main-main .div-info .comment-form .comment-form-main .comment-textarea .emoji-list {
-        width: 80%; } }
+        width: 80%; } }

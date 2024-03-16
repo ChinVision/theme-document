@@ -5,6 +5,7 @@
  * @author 友人a丶
  * @date 2022-07-08
  * */
+
 get_template_part( './template/index/footer' );
 nicen_theme_config('document_footer_tongji');
 /*
@@ -16,4 +17,13 @@ if(nicen_theme_showStructure()){
 wp_footer();//wordpress底部代码
 ?>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var notification = document.getElementById('nice-notification');
+    if (notification) {
+        alert(notification.textContent);
+    }
+});
+</script>
+
 </html>

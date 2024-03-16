@@ -89,7 +89,7 @@ function nicen_theme_getPostViews($postID)
 
 /**
  * 文章点赞次数+1
- */
+
 function nicen_theme_setPostNice($postID)
 {
 
@@ -104,6 +104,35 @@ function nicen_theme_setPostNice($postID)
         update_post_meta($postID, $count_key, $count);
     }
 }
+ */
+
+/**
+ * 文章点赞次数+1，每个用户只能点一次
+ */
+function nicen_theme_setPostNice($postID)
+{
+    // 获取当前用户的 ID
+    $user_id = get_current_user_id();
+
+    // 检查用户是否已经对文章点过赞
+    $has_voted = get_post_meta($postID, 'post_nice_voted_' . $user_id, true);
+
+    if (!$has_voted) {
+        // 如果用户尚未对文章点过赞，则进行点赞操作
+        $count_key = 'post_nice_count';
+        $count = get_post_meta($postID, $count_key, true);
+        if ($count == '') {
+            $count = 0;
+        }
+
+        $count++;
+        update_post_meta($postID, $count_key, $count);
+
+        // 设置用户已经点过赞的标记
+        update_post_meta($postID, 'post_nice_voted_' . $user_id, true);
+    }
+}
+
 
 
 /**
@@ -126,8 +155,8 @@ function nicen_theme_getPostNice($postID)
 
 
 /**
- * 文章点赞次数+1
- */
+ * 文章点踩次数+1
+
 function nicen_theme_setPostBad($postID)
 {
 
@@ -142,6 +171,33 @@ function nicen_theme_setPostBad($postID)
         update_post_meta($postID, $count_key, $count);
     }
 }
+ */
+function nicen_theme_setPostBad($postID)
+{
+    // 获取当前用户的 ID
+    $user_id = get_current_user_id();
+
+    // 检查用户是否已经对文章进行过点踩操作
+    $has_voted = get_post_meta($postID, 'post_bad_voted_' . $user_id, true);
+
+    if (!$has_voted) {
+        // 如果用户尚未对文章进行过点踩操作，则进行点踩操作
+        $count_key = 'post_bad_count';
+        $count = get_post_meta($postID, $count_key, true);
+        if ($count == '') {
+            $count = 0;
+        }
+
+        $count++;
+        update_post_meta($postID, $count_key, $count);
+
+        // 设置用户已经进行过点踩操作的标记
+        update_post_meta($postID, 'post_bad_voted_' . $user_id, true);
+    } else {
+        // 如果用户已经对文章进行过点踩操作，则不执行任何操作
+    }
+}
+
 
 
 /**
